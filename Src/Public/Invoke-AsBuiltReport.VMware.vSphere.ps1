@@ -1569,7 +1569,9 @@ function Invoke-AsBuiltReport.VMware.vSphere {
                                 
                                                 #region Cluster VUM Baselines
                                                 if ($VUMConnection) {
-                                                    $ClusterPatchBaselines = $Cluster | Get-PatchBaseline
+                                                    if ("Desktop" -eq $PSVersionTable.PsEdition) {
+                                                        $ClusterPatchBaselines = $Cluster | Get-PatchBaseline
+                                                    }
                                                     if ($ClusterPatchBaselines) {
                                                         Section -Style Heading4 'Update Manager Baselines' {
                                                             $ClusterBaselines = foreach ($ClusterBaseline in $ClusterPatchBaselines) {
@@ -1960,7 +1962,10 @@ function Invoke-AsBuiltReport.VMware.vSphere {
 
                                             #region ESXi Update Manager Baseline Information
                                             if ($VumServer.Name) {
-                                                $VMHostPatchBaselines = $VMHost | Get-PatchBaseline
+                                                if ("Desktop" -eq $PSVersionTable.PsEdition) {
+                                                    #Not yet available with PowerShell Core => Skip
+                                                    $VMHostPatchBaselines = $VMHost | Get-PatchBaseline
+                                                }
                                                 if ($VMHostPatchBaselines) {
                                                     Section -Style Heading5 'Update Manager Baselines' {
                                                         $VMHostBaselines = foreach ($VMHostBaseline in $VMHostPatchBaselines) {
@@ -3940,7 +3945,9 @@ function Invoke-AsBuiltReport.VMware.vSphere {
 
                 #region VMware Update Manager Section
                 if ($InfoLevel.VUM -ge 1 -and $VumServer.Name) {
-                    $VUMBaselines = Get-PatchBaseline -Server $vCenter
+                    if ("Desktop" -eq $PSVersionTable.PsEdition) {
+                        $VUMBaselines = Get-PatchBaseline -Server $vCenter
+                    }
                     if ($VUMBaselines) {
                         Section -Style Heading2 'VMware Update Manager' {
                             Paragraph "The following sections detail the configuration of VMware Update Manager managed by vCenter Server $vCenterServerName."
