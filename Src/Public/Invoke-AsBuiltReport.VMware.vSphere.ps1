@@ -1790,7 +1790,11 @@ function Invoke-AsBuiltReport.VMware.vSphere {
                                             #region ESXi Host Specifications
                                             $VMHostUptime = Get-Uptime -VMHost $VMHost
                                             $esxcli = Get-EsxCli -VMHost $VMHost -V2 -Server $vCenter
-                                            $VMHostHardware = Get-VMHostHardware -VMHost $VMHost
+                                            if ("Desktop" -eq $PSVersionTable.PsEdition) {
+                                                $VMHostHardware = Get-VMHostHardware -VMHost $VMHost
+                                            } else {
+                                                $VMHostHardware = @{'SerialNumber' = 'Unknown'; 'NicCount' = 'Unknown'}
+                                            }
                                             $VMHostLicense = Get-License -VMHost $VMHost
                                             $ScratchLocation = Get-AdvancedSetting -Entity $VMHost | Where-Object { $_.Name -eq 'ScratchConfig.CurrentScratchLocation' }
                                             $VMHostDetail = [PSCustomObject]@{
