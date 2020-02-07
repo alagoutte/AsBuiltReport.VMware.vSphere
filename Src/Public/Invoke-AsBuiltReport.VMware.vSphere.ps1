@@ -1597,7 +1597,9 @@ function Invoke-AsBuiltReport.VMware.vSphere {
 
                                                 #region Cluster VUM Compliance (Advanced Detail Information)
                                                 if ($InfoLevel.Cluster -ge 4 -and $VumServer.Name) {
-                                                    $ClusterCompliances = $Cluster | Get-Compliance
+                                                    if ("Desktop" -eq $PSVersionTable.PsEdition) {
+                                                        $ClusterCompliances = $Cluster | Get-Compliance
+                                                    }
                                                     if ($ClusterCompliances) {
                                                         Section -Style Heading4 'Update Manager Compliance' {
                                                             $ClusterComplianceInfo = foreach ($ClusterCompliance in $ClusterCompliances) {
@@ -1986,7 +1988,9 @@ function Invoke-AsBuiltReport.VMware.vSphere {
 
                                             #region ESXi Update Manager Compliance Information
                                             if ($VumServer.Name) {
-                                                $VMHostCompliances = $VMHost | Get-Compliance
+                                                if ("Desktop" -eq $PSVersionTable.PsEdition) {
+                                                    $VMHostCompliances = $VMHost | Get-Compliance
+                                                }
                                                 if ($VMHostCompliances) {
                                                     Section -Style Heading5 'Update Manager Compliance' {
                                                         $VMHostComplianceInfo = foreach ($VMHostCompliance in $VMHostCompliances) {
